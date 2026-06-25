@@ -1,52 +1,132 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация | Агентство "Фокус"</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+        .auth-card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+        .auth-logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+        .auth-title {
+            font-size: 28px;
+            color: #e74c3c;
+            margin-bottom: 30px;
+        }
+        .auth-form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .auth-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #888;
+        }
+        .auth-form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+        }
+        .auth-form-group input:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+        .auth-btn {
+            width: 100%;
+            background: #e74c3c;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .auth-btn:hover {
+            background: #c0392b;
+        }
+        .auth-links {
+            margin-top: 20px;
+            color: #888;
+        }
+        .auth-links a {
+            color: #e74c3c;
+            text-decoration: none;
+        }
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        .auth-error {
+            background: #c0392b;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <img src="{{ asset('images/focus white.png') }}" alt="Логотип" class="auth-logo">
+        <h1 class="auth-title">Регистрация</h1>
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+        @if($errors->any())
+            <div class="auth-error">
+                @foreach($errors->all() as $error)
+                    {{ $error }}<br>
+                @endforeach
+            </div>
+        @endif
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <div class="auth-form-group">
+                <label>Имя</label>
+                <input type="text" name="name" value="{{ old('name') }}" required autofocus>
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <div class="auth-form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required>
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <div class="auth-form-group">
+                <label>Пароль</label>
+                <input type="password" name="password" required>
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <div class="auth-form-group">
+                <label>Подтверждение пароля</label>
+                <input type="password" name="password_confirmation" required>
+            </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+            <button type="submit" class="auth-btn">Зарегистрироваться</button>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            <div class="auth-links">
+                <a href="{{ route('login') }}">Уже есть аккаунт? Войти</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

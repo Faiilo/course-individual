@@ -26,9 +26,22 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // 👇 ЭТОТ МЕТОД ДОБАВЬ
     public function isAdmin()
+{
+    return $this->is_admin == 1;
+}
+
+    // 👇 ДОБАВЬ ЭТОТ МЕТОД
+    public function subscription()
     {
-        return $this->is_admin === true;
+        return $this->belongsTo(Subscription::class, 'id_subscription');
     }
+
+    // 👇 ДОБАВЬ ЭТОТ МЕТОД
+    public function hasActiveSubscription()
+{
+    return $this->id_subscription && 
+           $this->subscription && 
+           $this->subscription->status === 'Активна';
+}
 }
