@@ -16,16 +16,10 @@ WORKDIR /var/www/html
 
 COPY . .
 
-# Устанавливаем зависимости
 RUN composer install --no-interaction --prefer-source
 
-# СНАЧАЛА СОЗДАЁМ ФАЙЛ И ПРАВА
-RUN touch database/database.sqlite && \
-    chmod 666 database/database.sqlite && \
-    chown www-data:www-data database/database.sqlite
-
-# ЗАТЕМ МИГРАЦИИ
-RUN php artisan migrate --force
+# ЭТУ СТРОКУ УДАЛЯЕМ!
+# RUN touch database/database.sqlite
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
