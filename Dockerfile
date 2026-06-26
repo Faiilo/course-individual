@@ -16,8 +16,8 @@ WORKDIR /var/www/html
 
 COPY . .
 
-# Используем composer update вместо install
-RUN composer update --no-dev --optimize-autoloader --no-interaction --prefer-dist
+# Самая простая команда установки
+RUN composer install --no-interaction
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
