@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
     unzip \
+    git \
     sqlite3 \
     && docker-php-ext-install pdo pdo_pgsql
 
@@ -18,7 +19,8 @@ COPY . .
 # СОЗДАЁМ ПУСТОЙ ФАЙЛ БАЗЫ ДАННЫХ
 RUN touch database/database.sqlite
 
-RUN composer install --no-interaction
+# ИСПОЛЬЗУЕМ --prefer-source ДЛЯ ЗАГРУЗКИ ЧЕРЕЗ GIT
+RUN composer install --no-interaction --prefer-source
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
