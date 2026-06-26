@@ -18,13 +18,14 @@ COPY . .
 
 RUN composer install --no-interaction --prefer-source
 
-# ЭТУ СТРОКУ УДАЛЯЕМ!
-# RUN touch database/database.sqlite
+# СОЗДАЁМ ССЫЛКУ STORAGE
+RUN php artisan storage:link
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache \
-    && chmod -R 755 /var/www/html/database
+    && chmod -R 755 /var/www/html/database \
+    && chmod -R 755 /var/www/html/public/storage
 
 RUN echo '<VirtualHost *:80>' > /etc/apache2/sites-available/000-default.conf && \
     echo '    DocumentRoot /var/www/html/public' >> /etc/apache2/sites-available/000-default.conf && \
