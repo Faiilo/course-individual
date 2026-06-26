@@ -16,7 +16,10 @@ WORKDIR /var/www/html
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+# НОВАЯ КОМАНДА - с ретраями и без кеша
+RUN composer config -g http.proxy false && \
+    composer config -g https.proxy false && \
+    composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
