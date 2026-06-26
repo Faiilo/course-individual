@@ -10,6 +10,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN a2enmod rewrite
 
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
 WORKDIR /var/www/html
 
 COPY . .
