@@ -14,12 +14,10 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-# Копируем composer.json (без composer.lock)
-COPY composer.json ./
-RUN composer install --no-interaction --prefer-source
-
-# Копируем остальной код
+# Копируем ВСЕ файлы ДО composer install
 COPY . .
+
+RUN composer install --no-interaction --prefer-source
 
 # ОЧИЩАЕМ КЕШ
 RUN php artisan config:clear && \
@@ -30,7 +28,7 @@ RUN php artisan config:clear && \
 # СОЗДАЁМ ССЫЛКУ STORAGE
 RUN php artisan storage:link
 
-# МЕНЯЕМ ПРАВА ТОЛЬКО НА НУЖНЫЕ ПАПКИ
+# МЕНЯЕМ ПРАВА ТОЛЬКО НА НУЖНЫЕ ПАПКИ (НЕ НА ВЕСЬ ПРОЕКТ!)
 RUN chown -R www-data:www-data /var/www/html/storage \
     && chown -R www-data:www-data /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www/html/database \
