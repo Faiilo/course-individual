@@ -14,8 +14,8 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-# Копируем только composer файлы для кеширования зависимостей
-COPY composer.json composer.lock ./
+# Копируем composer.json (без composer.lock)
+COPY composer.json ./
 RUN composer install --no-interaction --prefer-source
 
 # Копируем остальной код
@@ -30,7 +30,7 @@ RUN php artisan config:clear && \
 # СОЗДАЁМ ССЫЛКУ STORAGE
 RUN php artisan storage:link
 
-# МЕНЯЕМ ПРАВА ТОЛЬКО НА НУЖНЫЕ ПАПКИ (НЕ НА ВЕСЬ ПРОЕКТ!)
+# МЕНЯЕМ ПРАВА ТОЛЬКО НА НУЖНЫЕ ПАПКИ
 RUN chown -R www-data:www-data /var/www/html/storage \
     && chown -R www-data:www-data /var/www/html/bootstrap/cache \
     && chown -R www-data:www-data /var/www/html/database \
