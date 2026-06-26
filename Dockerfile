@@ -4,7 +4,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
     unzip \
-    && docker-php-ext-install pdo pdo_pgsql
+    sqlite3 \
+    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -14,13 +15,16 @@ WORKDIR /var/www/html
 
 COPY . .
 
+# СОЗДАЁМ ПУСТОЙ ФАЙЛ БАЗЫ ДАННЫХ
+RUN touch database/database.sqlite
+
 RUN composer install --no-interaction
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && chmod -R 755 /var/www/html/database
 
-# СОЗДАЕМ КОНФИГ APACHE ВРУЧНУЮ
 RUN echo '<VirtualHost *:80>' > /etc/apache2/sites-available/000-default.conf && \
     echo '    DocumentRoot /var/www/html/public' >> /etc/apache2/sites-available/000-default.conf && \
     echo '    <Directory /var/www/html/public>' >> /etc/apache2/sites-available/000-default.conf && \
